@@ -2,6 +2,9 @@ import prisma from 'lib/prisma';
 import moment from 'moment';
 
 export default async function handle(req, res) {
+
+  console.log('req receive', req.query);
+
   try {
     if (req.method === 'GET') {
       const {offset = 0, limit = 20} = req.query;
@@ -31,4 +34,6 @@ export default async function handle(req, res) {
   } catch (error) {
     res.status(500).json(error);
   }
+
+  console.log('res sent')
 }

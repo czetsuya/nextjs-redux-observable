@@ -1,4 +1,4 @@
-import { reducer as user, epics as userEpics } from './modules/UserModule.js';
+import {epics as userEpics, reducer as user} from './modules/UserModule.js';
 
 export const reducers = {
   user,

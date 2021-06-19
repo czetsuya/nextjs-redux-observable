@@ -17,28 +17,32 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {PersonAdd} from "@material-ui/icons";
 
-import {retrieveUserList,} from 'redux/modules/UserModule';
+import {retrieveList,} from 'redux/modules/UserModule';
 import {useRouter} from "next/router";
 
+const ENTITY_TYPE = "users";
+
 const useUsers = () =>
-    useSelector(({user: {users, count, status, user}}) => ({
-      users,
-      storeUser: user,
-      count,
-      status,
-    }));
+    useSelector((state) => {
+      const {user} = state;
+      const {list, count} = user[ENTITY_TYPE] || {};
+      return {users: list, count}
+    });
 
 const UserList = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const {users, storeUser, count, status} = useUsers();
+  const {users, count} = useUsers();
   const hasUsers = !!users && users.length > 0;
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
 
+  const xxx = useSelector((state) => state.users);
+  console.log(xxx)
+
   useEffect(() => {
-    dispatch(retrieveUserList({offset: offset * limit, limit}));
+    dispatch(retrieveList({type: ENTITY_TYPE, offset: offset * limit, limit}));
   }, [dispatch, offset, limit]);
 
   return (
