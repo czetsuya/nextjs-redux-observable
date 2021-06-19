@@ -17,15 +17,19 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {PersonAdd} from "@material-ui/icons";
 
-import {retrieveList,} from 'redux/modules/UserModule';
+import {retrieveList,} from 'redux/modules/GenericEntityModule';
 import {useRouter} from "next/router";
 
+/**
+ * Must match the endpoint in api.
+ * @type {string} type of object that will be pass to generic redux state handler
+ */
 const ENTITY_TYPE = "users";
 
 const useUsers = () =>
     useSelector((state) => {
-      const {user} = state;
-      const {list, count} = user[ENTITY_TYPE] || {};
+      const {genericEntity} = state;
+      const {list, count} = genericEntity[ENTITY_TYPE] || {};
       return {users: list, count}
     });
 
@@ -37,9 +41,6 @@ const UserList = () => {
   const hasUsers = !!users && users.length > 0;
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
-
-  const xxx = useSelector((state) => state.users);
-  console.log(xxx)
 
   useEffect(() => {
     dispatch(retrieveList({type: ENTITY_TYPE, offset: offset * limit, limit}));

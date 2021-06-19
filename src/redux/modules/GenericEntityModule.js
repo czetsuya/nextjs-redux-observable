@@ -7,19 +7,12 @@ import {actionStates} from '../ModuleUtil';
 // CONSTANTS - START
 const INITIAL_STATE = {
   error: null,
-  status: {saved: false, updated: false, deleted: false},
+  status: {inserted: false, updated: false, deleted: false},
 };
 // CONSTANTS -END
 
 // ACTION TYPES - START
 const RETRIEVE_LIST = actionStates('actions/RETRIEVE_LIST');
-const CREATE_USER = actionStates('users/CREATE_USER');
-const RETRIEVE_USER = actionStates('users/RETRIEVE_USER');
-const UPDATE_USER = actionStates('users/UPDATE_USER');
-const DELETE_USER = actionStates('users/DELETE_USER');
-const REDIRECT_TO_UPDATE_PAGE = actionStates('users/REDIRECT_TO_UPDATE_PAGE');
-const CLEAR_STATUS = 'users/CLEAR_STATUS';
-const CLEAR_USER = 'users/CLEAR_USER';
 // ACTION TYPES - END
 
 // REDUCER - START
@@ -33,7 +26,6 @@ export const reducer = (state = INITIAL_STATE, {type, payload}) => {
           count: payload.count
         }
       };
-    case RETRIEVE_USER.ERROR:
     case RETRIEVE_LIST.ERROR:
       return {
         ...state,
@@ -56,18 +48,6 @@ export const retrieveListSuccess = ({type, list, count}) => ({
 });
 export const retrieveListError = ({status, name, message}) => ({
   type: RETRIEVE_LIST.ERROR,
-  payload: {status, name, message},
-});
-export const retrieveUser = (id) => ({
-  type: RETRIEVE_USER.START,
-  payload: {id},
-});
-export const retrieveUserSuccess = (user) => ({
-  type: RETRIEVE_USER.SUCCESS,
-  payload: {user},
-});
-export const retrieveUserError = ({status, name, message}) => ({
-  type: RETRIEVE_USER.ERROR,
   payload: {status, name, message},
 });
 // ACTIONS - END
