@@ -1,7 +1,7 @@
-import { reducer as user, epics as userEpics } from './modules/UserModule.js';
+import {epics as genericEntityEpics, reducer as genericEntity} from './modules/GenericEntityModule.js';
 
 export const reducers = {
-  user,
+  genericEntity
 };
 
-export const epics = [...userEpics];
+export const epics = [...genericEntityEpics];
