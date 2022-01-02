@@ -1,4 +1,4 @@
-import {UserList} from "views/User";
+import UserList from "views/User/UserList";
 
 const ListPage = () => {
 

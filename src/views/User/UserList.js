@@ -12,10 +12,10 @@ import {
   TableFooter,
   TableHead,
   TableRow
-} from "@material-ui/core";
+} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {PersonAdd} from "@material-ui/icons";
+import {PersonAdd} from "@mui/icons-material";
 
 import {retrieveList,} from 'redux/modules/GenericEntityModule';
 import {useRouter} from "next/router";
@@ -48,8 +48,8 @@ const UserList = () => {
 
   return (
       <>
-        <TableContainer className={styles.tableContainer} component={Paper}>
-          <Table className={styles.table}>
+        <TableContainer>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell colSpan={6} align="right">
@@ -66,7 +66,7 @@ const UserList = () => {
                 <TableCell>Last name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Birth date</TableCell>
-                <TableCell className={styles.buttonContainer}></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
