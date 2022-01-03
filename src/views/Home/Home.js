@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import styles from './Home.module.css';
 import Link from 'next/link';
+import {Container} from "@mui/material";
 
 const Home = () => (
-  <>
+  <Container maxWidth={"sm"} fixed>
     <Head>
       <title>Home - NextJS Frontend Framework</title>
     </Head>
@@ -48,7 +49,7 @@ const Home = () => (
         Czetsuya Tech
       </a>
     </footer>
-  </>
+  </Container>
 );
 
 export default Home;

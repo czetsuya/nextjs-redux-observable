@@ -12,10 +12,12 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.5",
+    "@mui/lab": "^5.0.0-alpha.62",
     "@mui/material": "^5.2.6",
     "@mui/styles": "^5.2.3",
     "@prisma/client": "^3.7.0",
     "@react-native-async-storage/async-storage": "^1.15.5",
+    "formik": "^2.2.9",
     "moment": "^2.29.1",
     "next": "11.0.0",
     "next-images": "^1.8.1",
@@ -28,7 +30,8 @@
     "redux-persist": "6.0.0",
     "rxjs": "6.5.5",
     "universal-rxjs-ajax": "2.0.4",
-    "validate": "^5.1.0"
+    "validate": "^5.1.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.27.0",
