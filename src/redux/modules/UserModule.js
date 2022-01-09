@@ -3,16 +3,18 @@ import {catchError, map, mergeMap} from 'rxjs/operators';
 import {ofType} from 'redux-observable';
 import {request} from 'universal-rxjs-ajax';
 import {actionStates} from '../ModuleUtil';
+import * as ajax from '../../utils/ajax';
 
 // CONSTANTS - START
 const INITIAL_STATE = {
   error: null,
   status: {inserted: false, updated: false, deleted: false},
 };
-// CONSTANTS -END
+// CONSTANTS - END
 
 // ACTION TYPES - START
-const RETRIEVE_LIST = actionStates('actions/RETRIEVE_LIST');
+const RETRIEVE_LIST = actionStates('actions/USER_RETRIEVE_LIST');
+const CREATE_USER = actionStates('actions/CREATE_USER');
 // ACTION TYPES - END
 
 // REDUCER - START
@@ -21,10 +23,12 @@ export const reducer = (state = INITIAL_STATE, {type, payload}) => {
     case RETRIEVE_LIST.SUCCESS:
       return {
         ...state,
-        [payload.type]: {
-          list: payload.list,
-          count: payload.count
-        }
+        list: payload.list,
+        count: payload.count
+      };
+    case CREATE_USER.SUCCESS:
+      return {
+        ...state
       };
     case RETRIEVE_LIST.ERROR:
       return {
@@ -38,13 +42,13 @@ export const reducer = (state = INITIAL_STATE, {type, payload}) => {
 // REDUCER - END
 
 // ACTIONS - START
-export const retrieveList = ({type, offset, limit}) => ({
+export const retrieveList = ({offset, limit}) => ({
   type: RETRIEVE_LIST.START,
-  payload: {type, offset, limit},
+  payload: {offset, limit},
 });
 export const retrieveListSuccess = ({type, list, count}) => ({
   type: RETRIEVE_LIST.SUCCESS,
-  payload: {type, list, count},
+  payload: {list, count},
 });
 export const retrieveListError = ({status, name, message}) => ({
   type: RETRIEVE_LIST.ERROR,
@@ -57,12 +61,14 @@ const retrieveListEpic = (action$, state$) =>
     action$.pipe(
         ofType(RETRIEVE_LIST.START),
         mergeMap((action) => {
-          const {type, limit, offset} = action.payload;
+          const {limit, offset} = action.payload;
           return request({
             url: `http://localhost:3000/api/${type}/?limit=${limit}&offset=${offset}`,
+            method: 'GET',
+            headers: ajax.getHeaders()
           }).pipe(
               map((response) => retrieveListSuccess(
-                  {type, list: response.response[type], count: response.response.count})),
+                  {list: response.response[type], count: response.response.count})),
               catchError((error) => {
                 const {status, name, message} = error;
                 return of(retrieveListError({status, name, message}));

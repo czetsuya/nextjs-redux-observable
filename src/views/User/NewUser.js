@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Container, Grid, TextField, Typography} from "@mui/material";
+import {Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import {useRouter} from "next/router";
 import {useDispatch} from "react-redux";
 import * as yup from 'yup';
@@ -7,6 +7,7 @@ import {useFormik} from "formik";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
+import Footer from "../Footer/Footer";
 
 const validationSchema = yup.object({
   email: yup
@@ -38,7 +39,7 @@ const NewUser = () => {
   }
 
   const onSubmit = (values) => {
-    return values;
+    console.log('submit');
   };
 
   const formik = useFormik({
@@ -48,7 +49,7 @@ const NewUser = () => {
   });
 
   return (
-      <Container>
+      <Container maxWidth={"sm"}>
         <Box marginBottom={4}>
           <Typography
               sx={{
@@ -119,15 +120,41 @@ const NewUser = () => {
                 <DatePicker
                     fullWidth
                     label="Birthdate"
+                    value={birthdate}
                     onChange={(newValue) => {
                       setBirthdate(newValue);
                     }}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => <TextField {...params} variant={"outlined"} fullWidth/>}
                 />
               </LocalizationProvider>
             </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" gutterBottom>
+                Fields that are marked with * sign are required.
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Button
+                      size="large"
+                      variant="contained"
+                      color="primary"
+                      type={"submit"}
+                  >
+                    Save
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Link href="/users">
+                    <Button size="large" variant="contained" color="secondary">
+                      Cancel
+                    </Button>
+                  </Link>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         </form>
+        <Footer></Footer>
       </Container>
   );
 }

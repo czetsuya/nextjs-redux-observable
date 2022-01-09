@@ -1,10 +1,9 @@
-import styles from './User.module.css';
 import React, {useEffect, useState} from 'react';
 import {
   Button,
   ButtonGroup,
+  Container,
   Link,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -17,8 +16,9 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {PersonAdd} from "@mui/icons-material";
 
-import {retrieveList,} from 'redux/modules/GenericEntityModule';
+import {retrieveList,} from 'redux/modules/UserModule';
 import {useRouter} from "next/router";
+import Footer from "../Footer/Footer";
 
 /**
  * Must match the endpoint in api.
@@ -28,8 +28,8 @@ const ENTITY_TYPE = "users";
 
 const useUsers = () =>
     useSelector((state) => {
-      const {genericEntity} = state;
-      const {list, count} = genericEntity[ENTITY_TYPE] || {};
+      const {user} = state;
+      const {list, count} = user || {};
       return {users: list, count}
     });
 
@@ -43,11 +43,11 @@ const UserList = () => {
   const [limit, setLimit] = useState(10);
 
   useEffect(() => {
-    dispatch(retrieveList({type: ENTITY_TYPE, offset: offset * limit, limit}));
+    dispatch(retrieveList({offset: offset * limit, limit}));
   }, [dispatch, offset, limit]);
 
   return (
-      <>
+      <Container maxWidth={"md"} fixed>
         <TableContainer>
           <Table>
             <TableHead>
@@ -80,7 +80,7 @@ const UserList = () => {
                         <TableCell>
                           {moment.utc(user.birthDate).format('MM-DD-YYYY')}
                         </TableCell>
-                        <TableCell className={styles.buttonContainer} align="right">
+                        <TableCell sx={{textAlign: "right"}}>
                           <ButtonGroup>
                             {/*  <Button onClick={editUser(user)}>*/}
                             {/*    /!*<Edit/>*!/*/}
@@ -112,7 +112,8 @@ const UserList = () => {
             </TableFooter>
           </Table>
         </TableContainer>
-      </>
+        <Footer></Footer>
+      </Container>
   );
 }
 

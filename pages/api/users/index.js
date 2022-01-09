@@ -7,7 +7,7 @@ export default async function handle(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const {offset = 0, limit = 20} = req.query;
+      const {offset, limit} = req.query;
       const users = await prisma.user.findMany({
         skip: parseInt(offset, 10),
         take: parseInt(limit, 10),

@@ -2,15 +2,17 @@ import Head from 'next/head';
 import styles from './Home.module.css';
 import Link from 'next/link';
 import {Container} from "@mui/material";
+import Footer from "../Footer/Footer";
 
 const Home = () => (
+
   <Container maxWidth={"sm"} fixed>
     <Head>
       <title>Home - NextJS Frontend Framework</title>
     </Head>
 
-    <main className={styles.main}>
-      <h1 className={styles.title}>NextJS Framework Template</h1>
+    <main>
+      <h1>NextJS Framework Template</h1>
 
       <h2>Sample pages</h2>
       <ul>
@@ -21,34 +23,8 @@ const Home = () => (
         </li>
       </ul>
 
-      <div className={styles.grid}>
-        <div className={styles.card}>
-          If you would like to support these tutorials I have a Patreon account
-          where you could contribute. It is a service that allows supporters to
-          contribute as little as a dollar a month. I would be most grateful for
-          any support. Also, if you have suggestions for future topics I would
-          love to hear your feedback.
-          <br />
-          <br />
-          <div>
-            Patreon:{' '}
-            <Link href="https://www.patreon.com/czetsuya">
-              <a>https://www.patreon.com/czetsuya</a>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Footer></Footer>
     </main>
-
-    <footer className={styles.footer}>
-      <a
-        href="https://www.czetsuyatech.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Czetsuya Tech
-      </a>
-    </footer>
   </Container>
 );
 
