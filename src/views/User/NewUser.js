@@ -8,6 +8,7 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
 import Footer from "../Footer/Footer";
+import {createUser} from '../../redux/modules/UserModule';
 
 const validationSchema = yup.object({
   email: yup
@@ -21,7 +22,7 @@ const validationSchema = yup.object({
   lastName: yup
   .string()
   .required('Please specify your first name'),
-  birthdate: yup
+  birthDate: yup
   .date()
 });
 
@@ -29,17 +30,21 @@ const NewUser = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const [birthdate, setBirthdate] = React.useState(null);
+  const [birthDate, setBirthDate] = React.useState(null);
 
   const initialValues = {
     firstName: '',
     lastName: '',
     email: '',
-    birthdate: ''
+    birthDate: ''
   }
 
   const onSubmit = (values) => {
-    console.log('submit');
+    const newValues = {
+      ...values,
+      birthDate: birthDate.toISOString()
+    }
+    dispatch(createUser(newValues, router));
   };
 
   const formik = useFormik({
@@ -120,9 +125,9 @@ const NewUser = () => {
                 <DatePicker
                     fullWidth
                     label="Birthdate"
-                    value={birthdate}
+                    value={birthDate}
                     onChange={(newValue) => {
-                      setBirthdate(newValue);
+                      setBirthDate(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} variant={"outlined"} fullWidth/>}
                 />

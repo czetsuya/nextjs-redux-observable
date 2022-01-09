@@ -20,12 +20,6 @@ import {retrieveList,} from 'redux/modules/UserModule';
 import {useRouter} from "next/router";
 import Footer from "../Footer/Footer";
 
-/**
- * Must match the endpoint in api.
- * @type {string} type of object that will be pass to generic redux state handler
- */
-const ENTITY_TYPE = "users";
-
 const useUsers = () =>
     useSelector((state) => {
       const {user} = state;
