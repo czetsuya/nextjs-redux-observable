@@ -15,6 +15,7 @@ const INITIAL_STATE = {
 // ACTION TYPES - START
 const RETRIEVE_LIST = actionStates('actions/USER_RETRIEVE_LIST');
 const CREATE_USER = actionStates('actions/CREATE_USER');
+const REDIRECT_TO_LIST_PAGE = actionStates('actions/REDIRECT_TO_LIST_PAGE');
 // ACTION TYPES - END
 
 // REDUCER - START
@@ -67,6 +68,9 @@ export const createUserKo = ({status, name, message}) => ({
   type: CREATE_USER.ERROR,
   payload: {status, name, message},
 });
+export const redirectToListPageSuccess = () => ({
+  type: REDIRECT_TO_LIST_PAGE.SUCCESS,
+});
 // ACTIONS - END
 
 // EPICS - START
@@ -95,9 +99,6 @@ const createUserEpic = (action$, state$) =>
         ofType(CREATE_USER.START),
         mergeMap(action => {
           const {user, router} = action.payload;
-          if (!!user.birthDate) {
-            user.birthDate = user.birthDate.toISOString();
-          }
           const newUser = Object.keys(user).reduce((userValues, key) => {
             const value = user[key];
             return !value ? userValues : {...userValues, [key]: value};
@@ -123,9 +124,11 @@ const createUserEpic = (action$, state$) =>
 const createUserOkEpic = (action$, state$) =>
     action$.pipe(
         ofType(CREATE_USER.SUCCESS),
-        mergeMap(action => {
+        map(action => {
           const {router} = action.payload;
+          console.log("create user ok", router)
           router.push("/users");
+          return redirectToListPageSuccess();
         })
     );
 // EPICS - END

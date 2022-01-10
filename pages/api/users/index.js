@@ -8,7 +8,7 @@ export default async function handle(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const {offset = "0", limit = "0"} = req.query;
+      const {offset = "0", limit = "10"} = req.query;
       const users = await prisma.user.findMany({
         skip: parseInt(offset, 10),
         take: parseInt(limit, 10),
@@ -18,6 +18,7 @@ export default async function handle(req, res) {
 
     } else if (req.method === 'POST') {
       const user = req.body;
+      console.log("received data", user);
       if (!!user.birthDate) {
         user.birthDate = moment.utc(user.birthDate).toDate();
       }
