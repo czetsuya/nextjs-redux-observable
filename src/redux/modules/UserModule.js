@@ -29,7 +29,9 @@ export const reducer = (state = INITIAL_STATE, {type, payload}) => {
       };
     case CREATE_USER.SUCCESS:
       return {
-        ...state
+        ...state,
+        user: payload.user,
+        status: { ...state.status, saved: true },
       };
     case RETRIEVE_LIST.ERROR:
       return {
