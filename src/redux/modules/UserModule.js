@@ -4,6 +4,7 @@ import {ofType} from 'redux-observable';
 import {request} from 'universal-rxjs-ajax';
 import {actionStates} from '../ModuleUtil';
 import * as ajax from '../../utils/ajax';
+import {ajaxGet, ajaxPost} from '../../utils/ajax';
 
 // CONSTANTS - START
 const INITIAL_STATE = {
@@ -31,7 +32,7 @@ export const reducer = (state = INITIAL_STATE, {type, payload}) => {
       return {
         ...state,
         user: payload.user,
-        status: { ...state.status, saved: true },
+        status: {...state.status, saved: true},
       };
     case RETRIEVE_LIST.ERROR:
       return {
@@ -81,10 +82,8 @@ const retrieveListEpic = (action$, state$) =>
         ofType(RETRIEVE_LIST.START),
         mergeMap((action) => {
           const {limit, offset} = action.payload;
-          return request({
-            url: `http://localhost:3000/api/users?limit=${limit}&offset=${offset}`,
-            method: 'GET',
-            headers: ajax.getHeaders()
+          return ajaxGet({
+            url: `api/users?limit=${limit}&offset=${offset}`
           }).pipe(
               map((resp) => retrieveListSuccess(
                   {list: resp.response.users, count: resp.response.count})),
@@ -106,8 +105,8 @@ const createUserEpic = (action$, state$) =>
             return !value ? userValues : {...userValues, [key]: value};
           }, {});
           console.log("posting new user", newUser);
-          return request({
-            url: `http://localhost:3000/api/users`,
+          return ajaxPost({
+            url: `api/users`,
             method: 'POST',
             headers: ajax.getHeaders(),
             body: {
