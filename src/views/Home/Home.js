@@ -12,7 +12,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1>NextJS Framework Template</h1>
+      <h1>NextJS Project Template</h1>
 
       <h2>Sample pages</h2>
       <ul>

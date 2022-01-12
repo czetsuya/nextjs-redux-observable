@@ -9,11 +9,11 @@ export const getHeaders = (headers) =>
 
 const ajaxRequest = (options) => {
 
-  options.url = "http://localhost:3000/" + options.url;
+  options.url = process.env.NEXT_PUBLIC_API_URL + options.url;
   return request(options);
 }
 
-export const ajaxGet = ({url = "/", headers = {}}) => {
+const ajaxGet = ({url = "/", headers = {}}) => {
 
   const config = {
     url,
@@ -24,7 +24,7 @@ export const ajaxGet = ({url = "/", headers = {}}) => {
   return ajaxRequest(config);
 }
 
-export const ajaxPost = ({url = "/", headers = {}, body = {}}) => {
+const ajaxPost = ({url = "/", headers = {}, body = {}}) => {
 
   const config = {
     url,
@@ -35,3 +35,22 @@ export const ajaxPost = ({url = "/", headers = {}, body = {}}) => {
 
   return ajaxRequest(config);
 }
+
+const ajaxDelete = ({url = "/", headers = {}}) => {
+
+  const config = {
+    url,
+    method: 'DELETE',
+    headers: getHeaders(headers)
+  }
+
+  return ajaxRequest(config);
+}
+
+const RxBackend = {
+  ajaxGet,
+  ajaxPost,
+  ajaxDelete
+}
+
+export default RxBackend;

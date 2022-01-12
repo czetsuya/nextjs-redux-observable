@@ -3,7 +3,12 @@ import {
   Button,
   ButtonGroup,
   Container,
-  Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Link, Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -14,31 +19,82 @@ import {
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {PersonAdd} from "@mui/icons-material";
+import {Delete, PersonAdd} from "@mui/icons-material";
 
-import {retrieveList,} from 'redux/modules/UserModule';
+import {clearUser, clearUserStatus, deleteUser, retrieveList,} from 'redux/modules/UserModule';
 import {useRouter} from "next/router";
 import Footer from "../Footer/Footer";
 
 const useUsers = () =>
-    useSelector((state) => {
-      const {user} = state;
-      const {list, count} = user || {};
-      return {users: list, count}
-    });
+    useSelector(({user: {users, count, status, user}}) => ({
+      users,
+      count,
+      status,
+      storeUser: user
+    }));
+
+const EMPTY_DIALOG = {
+  open: false,
+  text: '',
+  title: '',
+  onConfirm: () => null,
+  onCancel: () => null
+}
+
+const EMPTY_ALERT = {
+  open: false,
+  text: '',
+};
 
 const UserList = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const {users, count} = useUsers();
+  const {users, count, status, storeUser} = useUsers();
   const hasUsers = !!users && users.length > 0;
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(10);
+  const [dialog, setDialog] = useState(EMPTY_DIALOG);
+  const [alert, setAlert] = useState(EMPTY_ALERT);
 
   useEffect(() => {
     dispatch(retrieveList({offset: offset * limit, limit}));
   }, [dispatch, offset, limit]);
+
+  useEffect(() => {
+    if (status.deleted) {
+      resetDialog();
+      dispatch(retrieveList({offset: offset * limit, limit}));
+      setAlert({
+        open: true,
+        text: `Successfully deleted user: ${storeUser.id}`,
+      });
+    }
+  }, [status, offset, limit, dispatch]);
+
+  const handleDeleteUser = ({id}) => () => {
+    dispatch(deleteUser({userId: id}));
+  };
+
+  const resetDialog = () => {
+    setDialog(EMPTY_DIALOG);
+  }
+
+  const resetAlert = () => {
+    setAlert(EMPTY_ALERT);
+    dispatch(clearUserStatus());
+    dispatch(clearUser());
+  };
+
+  const openDialog = (user) => () => {
+    setDialog({
+      open: true,
+      title: 'Delete user',
+      text: `Delete user: ${user.id}?`,
+      onConfirm: handleDeleteUser(user),
+      onCancel: () => resetDialog()
+    });
+  };
 
   return (
       <Container maxWidth={"md"} fixed>
@@ -76,12 +132,12 @@ const UserList = () => {
                         </TableCell>
                         <TableCell sx={{textAlign: "right"}}>
                           <ButtonGroup>
-                            {/*  <Button onClick={editUser(user)}>*/}
-                            {/*    /!*<Edit/>*!/*/}
-                            {/*  </Button>*/}
-                            {/*  <Button onClick={openDialog(user)}>*/}
-                            {/*    /!*<Delete/>*!/*/}
-                            {/*  </Button>*/}
+                            {/*<Button onClick={editUser(user)}>*/}
+                            {/*  /!*<Edit/>*!/*/}
+                            {/*</Button>*/}
+                            <Button onClick={openDialog(user)}>
+                              {<Delete/>}
+                            </Button>
                           </ButtonGroup>
                         </TableCell>
                       </TableRow>
@@ -107,6 +163,33 @@ const UserList = () => {
           </Table>
         </TableContainer>
         <Footer></Footer>
+        <Dialog
+            open={dialog.open}
+            onClose={dialog.onCancel}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {dialog.title}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {dialog.text}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={dialog.onCancel}>Disagree</Button>
+            <Button onClick={dialog.onConfirm} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+            open={alert.open}
+            autoHideDuration={6000}
+            onClose={resetAlert}
+            message={alert.text}
+        />
       </Container>
   );
 }
