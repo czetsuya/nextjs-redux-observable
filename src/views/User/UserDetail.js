@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import {useRouter} from "next/router";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import * as yup from 'yup';
 import {useFormik} from "formik";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
 import Footer from "../Footer/Footer";
-import {createUser} from '../../redux/modules/UserModule';
+import {createUser, retrieveUser} from '../../redux/modules/UserModule';
 
 const validationSchema = yup.object({
   email: yup
@@ -26,18 +26,31 @@ const validationSchema = yup.object({
   .date()
 });
 
-const NewUser = () => {
+const INITIAL_USER = {
+  firstName: '',
+  lastName: '',
+  email: ''
+}
+
+const useUser = () => useSelector(({user: {user, status}}) => ({
+  user,
+  status
+}));
+
+const UserDetail = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const {user, status} = useUser();
   const [birthDate, setBirthDate] = React.useState(null);
+  const {id} = router.query;
 
-  const initialValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    birthDate: ''
-  }
+  useEffect(() => {
+
+    if (id && !isNaN(id)) {
+      dispatch(retrieveUser(id));
+    }
+  }, [dispatch, id]);
 
   const onSubmit = (values) => {
     const newValues = {
@@ -48,10 +61,23 @@ const NewUser = () => {
   };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: INITIAL_USER,
     validationSchema: validationSchema,
-    onSubmit,
+    onSubmit
   });
+
+  useEffect(() => {
+    if (user && user !== null) {
+      console.log('formik.setValues')
+      setBirthDate(user.birthDate);
+
+      formik.setValues({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      });
+    }
+  }, [user])
 
   return (
       <Container maxWidth={"sm"}>
@@ -164,4 +190,4 @@ const NewUser = () => {
   );
 }
 
-export default NewUser;
+export default UserDetail;

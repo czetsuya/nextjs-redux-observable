@@ -36,6 +36,18 @@ const ajaxPost = ({url = "/", headers = {}, body = {}}) => {
   return ajaxRequest(config);
 }
 
+const ajaxPut = ({url = "/", headers = {}, body = {}}) => {
+
+  const config = {
+    url,
+    method: 'PUT',
+    headers: getHeaders(headers),
+    body
+  }
+
+  return ajaxRequest(config);
+}
+
 const ajaxDelete = ({url = "/", headers = {}}) => {
 
   const config = {

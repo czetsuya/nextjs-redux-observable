@@ -8,7 +8,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Link, Snackbar,
+  Link,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -19,7 +20,7 @@ import {
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {Delete, PersonAdd} from "@mui/icons-material";
+import {Delete, Edit, PersonAdd} from "@mui/icons-material";
 
 import {clearUser, clearUserStatus, deleteUser, retrieveList,} from 'redux/modules/UserModule';
 import {useRouter} from "next/router";
@@ -46,7 +47,7 @@ const EMPTY_ALERT = {
   text: '',
 };
 
-const UserList = () => {
+const Users = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -96,6 +97,10 @@ const UserList = () => {
     });
   };
 
+  const editUser = ({id}) => () => {
+    router.push(`/users/${id}`);
+  }
+
   return (
       <Container maxWidth={"md"} fixed>
         <TableContainer>
@@ -132,9 +137,9 @@ const UserList = () => {
                         </TableCell>
                         <TableCell sx={{textAlign: "right"}}>
                           <ButtonGroup>
-                            {/*<Button onClick={editUser(user)}>*/}
-                            {/*  /!*<Edit/>*!/*/}
-                            {/*</Button>*/}
+                            <Button onClick={editUser(user)}>
+                              <Edit/>
+                            </Button>
                             <Button onClick={openDialog(user)}>
                               {<Delete/>}
                             </Button>
@@ -194,4 +199,4 @@ const UserList = () => {
   );
 }
 
-export default UserList;
+export default Users;

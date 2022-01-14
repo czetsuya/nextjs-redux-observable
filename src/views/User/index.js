@@ -1,2 +1,2 @@
-export {default as UserList} from './UserList';
-export {default as NewUser} from './NewUser';
+export {default as Users} from './Users';
+export {default as UserDetail} from './UserDetail';

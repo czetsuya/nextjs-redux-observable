@@ -1,13 +1,14 @@
-import prisma from 'lib/prisma';
+import {PrismaClient} from '@prisma/client';
 import moment from 'moment';
 
 export default async function handle(req, res) {
 
-  console.log('req headers', req.headers);
   console.log('req params', req.query);
 
+  const prisma = new PrismaClient();
+
   try {
-    if (req.method === 'GET') {
+    if (req.method === 'GET') { // list
       const {offset = "0", limit = "10"} = req.query;
       const users = await prisma.user.findMany({
         skip: parseInt(offset, 10),
@@ -16,7 +17,7 @@ export default async function handle(req, res) {
       const count = await prisma.user.count();
       res.status(200).json({users, count});
 
-    } else if (req.method === 'POST') {
+    } else if (req.method === 'POST') { // create
       const user = req.body;
       console.log("received data", user);
       if (!!user.birthDate) {

@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 import moment from 'moment';
 
 export default async function handler(req, res) {
 
-  console.log('req headers', req.headers);
   console.log('req params', req.query);
 
   const prisma = new PrismaClient();
