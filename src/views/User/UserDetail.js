@@ -8,7 +8,7 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
 import Footer from "../Footer/Footer";
-import {createUser, retrieveUser} from '../../redux/modules/UserModule';
+import {clearUser, clearUserStatus, createUser, retrieveUser} from '../../redux/modules/UserModule';
 
 const validationSchema = yup.object({
   email: yup
@@ -67,6 +67,14 @@ const UserDetail = () => {
   });
 
   useEffect(() => {
+    return () => {
+      console.log("clearing status");
+      dispatch(clearUser());
+      dispatch(clearUserStatus());
+    };
+  }, [router, dispatch, id]);
+
+  useEffect(() => {
     if (user && user !== null) {
       console.log('formik.setValues')
       setBirthDate(user.birthDate);
@@ -77,7 +85,7 @@ const UserDetail = () => {
         email: user.email
       });
     }
-  }, [user])
+  }, [user]);
 
   return (
       <Container maxWidth={"sm"}>

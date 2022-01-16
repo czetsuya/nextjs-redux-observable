@@ -23,6 +23,7 @@ const CLEAR_USER_STATUS = "actions/CLEAR_USER_STATUS";
 
 // REDUCER - START
 export const reducer = (state = INITIAL_STATE, {type, payload}) => {
+  state = {...state, list: undefined};
   switch (type) {
     case RETRIEVE_LIST.SUCCESS:
       return {
@@ -73,11 +74,11 @@ export const retrieveList = ({offset, limit}) => ({
   type: RETRIEVE_LIST.START,
   payload: {offset, limit},
 });
-export const retrieveListOk = ({users, count}) => ({
+export const retrieveUsersOk = ({users, count}) => ({
   type: RETRIEVE_LIST.SUCCESS,
   payload: {users, count},
 });
-export const retrieveListKo = ({status, name, message}) => ({
+export const retrieveUsersKo = ({status, name, message}) => ({
   type: RETRIEVE_LIST.ERROR,
   payload: {status, name, message},
 });
@@ -134,7 +135,7 @@ export const redirectToListPageOk = () => ({
 // ACTIONS - END
 
 // EPICS - START
-const retrieveListEpic = (action$, state$) =>
+const retrieveUsersEpic = (action$, state$) =>
     action$.pipe(
         ofType(RETRIEVE_LIST.START),
         mergeMap((action) => {
@@ -142,14 +143,14 @@ const retrieveListEpic = (action$, state$) =>
           return RxBackend.ajaxGet({
             url: `api/users?limit=${limit}&offset=${offset}`
           }).pipe(
-              map((resp) => retrieveListOk(
+              map((resp) => retrieveUsersOk(
                   {users: resp.response.users, count: resp.response.count})),
               catchError((err) => {
                 const {status, name, message} = err;
-                return of(retrieveListKo({status, name, message}));
+                return of(retrieveUsersKo({status, name, message}));
               }),
           );
-        }),
+        })
     );
 
 const createUserEpic = (action$, state$) =>
@@ -174,7 +175,7 @@ const createUserEpic = (action$, state$) =>
                 const {status, name, message} = err;
                 return of(createUserKo({status, name, message}));
               })
-          );
+          )
         })
     );
 
@@ -202,7 +203,7 @@ const deleteUserEpic = (action$, state$) =>
                 const {status, name, message} = err;
                 return of(deleteUserKo({status, name, message}));
               })
-          );
+          )
         })
     );
 
@@ -220,11 +221,11 @@ const retrieveUserEpic = (action$, state$) =>
                 const {status, name, message} = err;
                 return of(retrieveUserKo({status, name, message}));
               }),
-          );
+          )
         })
     );
 // EPICS - END
 
 export const epics = [
-  retrieveListEpic, createUserEpic, createUserOkEpic, deleteUserEpic, retrieveUserEpic
+  retrieveUsersEpic, createUserEpic, createUserOkEpic, deleteUserEpic, retrieveUserEpic
 ];
