@@ -8,7 +8,7 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
 import Footer from "../Footer/Footer";
-import {clearUser, clearUserStatus, createUser, retrieveUser} from '../../redux/modules/UserModule';
+import {clearUser, clearUserStatus, createUser, retrieveUser, updateUser} from '../../redux/modules/UserModule';
 
 const validationSchema = yup.object({
   email: yup
@@ -50,29 +50,7 @@ const UserDetail = () => {
     if (id && !isNaN(id)) {
       dispatch(retrieveUser(id));
     }
-  }, [dispatch, id]);
-
-  const onSubmit = (values) => {
-    const newValues = {
-      ...values,
-      birthDate: birthDate.toISOString()
-    }
-    dispatch(createUser(newValues, router));
-  };
-
-  const formik = useFormik({
-    initialValues: INITIAL_USER,
-    validationSchema: validationSchema,
-    onSubmit
-  });
-
-  useEffect(() => {
-    return () => {
-      console.log("clearing status");
-      dispatch(clearUser());
-      dispatch(clearUserStatus());
-    };
-  }, [router, dispatch, id]);
+  }, [id]);
 
   useEffect(() => {
     if (user && user !== null) {
@@ -86,6 +64,35 @@ const UserDetail = () => {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    return () => {
+      console.log("clearing status");
+      dispatch(clearUser());
+      dispatch(clearUserStatus());
+    };
+  }, [router]);
+
+  const onSubmit = (values) => {
+    let newValues = {
+      ...values,
+      birthDate: birthDate.toISOString()
+    }
+
+    if (user && user.id) {
+      newValues.id = user.id;
+      dispatch(updateUser(newValues, router));
+
+    } else {
+      dispatch(createUser(newValues, router));
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: INITIAL_USER,
+    validationSchema: validationSchema,
+    onSubmit
+  });
 
   return (
       <Container maxWidth={"sm"}>

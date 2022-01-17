@@ -62,6 +62,7 @@ const ajaxDelete = ({url = "/", headers = {}}) => {
 const RxBackend = {
   ajaxGet,
   ajaxPost,
+  ajaxPut,
   ajaxDelete
 }
 
