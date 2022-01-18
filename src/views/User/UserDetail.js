@@ -97,7 +97,6 @@ const UserDetail = () => {
 
   return (
       <Container maxWidth={"sm"}>
-        <Alert severity="error"></Alert>
         <Box marginBottom={4}>
           <Typography
               sx={{

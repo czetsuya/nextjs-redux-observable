@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
 import moment from 'moment';
 
 export default async function handler(req, res) {
@@ -23,7 +23,10 @@ export default async function handler(req, res) {
 
   } else if (req.method === 'PUT') {
     const {id} = req.query;
-    const user = req.body;
+    const userId = parseInt(id);
+
+    const user = {...req.body, id: userId};
+
     if (!!user.birthDate) {
       user.birthDate = moment.utc(user.birthDate).toDate();
     }
@@ -32,7 +35,7 @@ export default async function handler(req, res) {
         ...user,
       },
       where: {
-        id: parseInt(id),
+        id: userId,
       },
     });
     res.status(200).json(result);
