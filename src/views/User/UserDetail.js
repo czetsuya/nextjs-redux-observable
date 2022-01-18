@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
+import {Alert, Box, Button, Container, Grid, Link, TextField, Typography} from "@mui/material";
 import {useRouter} from "next/router";
 import {useDispatch, useSelector} from "react-redux";
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {DatePicker} from "@mui/lab";
 import Footer from "../Footer/Footer";
 import {clearUser, clearUserStatus, createUser, retrieveUser, updateUser} from '../../redux/modules/UserModule';
+import moment from "moment";
 
 const validationSchema = yup.object({
   email: yup
@@ -55,7 +56,7 @@ const UserDetail = () => {
   useEffect(() => {
     if (user && user !== null) {
       console.log('formik.setValues')
-      setBirthDate(user.birthDate);
+      setBirthDate(moment(user.birthDate));
 
       formik.setValues({
         firstName: user.firstName,
@@ -96,6 +97,7 @@ const UserDetail = () => {
 
   return (
       <Container maxWidth={"sm"}>
+        <Alert severity="error"></Alert>
         <Box marginBottom={4}>
           <Typography
               sx={{

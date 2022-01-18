@@ -48,6 +48,18 @@ const ajaxPut = ({url = "/", headers = {}, body = {}}) => {
   return ajaxRequest(config);
 }
 
+const ajaxPatch = ({url = "/", headers = {}, body = {}}) => {
+
+  const config = {
+    url,
+    method: 'PATCH',
+    headers: getHeaders(headers),
+    body
+  }
+
+  return ajaxRequest(config);
+}
+
 const ajaxDelete = ({url = "/", headers = {}}) => {
 
   const config = {
@@ -63,6 +75,7 @@ const RxBackend = {
   ajaxGet,
   ajaxPost,
   ajaxPut,
+  ajaxPatch,
   ajaxDelete
 }
 

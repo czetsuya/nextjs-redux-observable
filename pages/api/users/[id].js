@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export default async function handler(req, res) {
 
-  console.log('req params', req.query);
+  console.log('start request: req params', req.query, req.body);
 
   const prisma = new PrismaClient();
 
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     });
     res.status(200).json(result);
 
-  } else if (req.method === 'PATCH') {
+  } else if (req.method === 'PUT') {
     const {id} = req.query;
     const user = req.body;
     if (!!user.birthDate) {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         ...user,
       },
       where: {
-        id: parseInt(id, 10),
+        id: parseInt(id),
       },
     });
     res.status(200).json(result);
@@ -40,4 +40,6 @@ export default async function handler(req, res) {
   } else {
     res.status(405).json({error: 'Invalid method.'});
   }
+
+  console.log("end request");
 }

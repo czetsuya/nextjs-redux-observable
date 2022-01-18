@@ -238,7 +238,7 @@ const updateUserEpic = (action$, state$) =>
           }, {});
           console.log("put user", newUser);
           return RxBackend.ajaxPut({
-            url: `api/users`,
+            url: `api/users/${user.id}`,
             body: {
               ...newUser
             }
