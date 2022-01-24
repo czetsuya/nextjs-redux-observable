@@ -1,10 +1,10 @@
-import UserList from "views/User/UserList";
+import {Users} from "views/User";
 
-const ListPage = () => {
+const UsersPage = () => {
 
   return (
-      <UserList/>
+      <Users/>
   )
 }
 
-export default ListPage;
+export default UsersPage;
