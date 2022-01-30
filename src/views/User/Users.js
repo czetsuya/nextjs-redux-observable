@@ -16,6 +16,7 @@ import {
   TableContainer,
   TableFooter,
   TableHead,
+  TablePagination,
   TableRow
 } from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
@@ -72,6 +73,14 @@ const Users = () => {
       });
     }
   }, [status, offset, limit, dispatch]);
+
+  const handleChangeRowsPerPage = ({target: {value}}) => {
+    setLimit(parseInt(value, 10));
+  };
+
+  const handleChangePage = (_, nextPage) => {
+    setOffset(nextPage);
+  };
 
   const handleDeleteUser = ({id}) => () => {
     dispatch(deleteUser({userId: id}));
@@ -155,14 +164,13 @@ const Users = () => {
             </TableBody>
             <TableFooter>
               <TableRow>
-                {/*<TablePagination*/}
-                {/*    component={TableCell}*/}
-                {/*    count={count}*/}
-                {/*    page={offset}*/}
-                {/*    rowsPerPage={limit}*/}
-                {/*    onChangePage={handleChangePage}*/}
-                {/*    onChangeRowsPerPage={handleChangeRowsPerPage}*/}
-                {/*/>*/}
+                <TablePagination
+                    count={count}
+                    page={offset}
+                    rowsPerPage={limit}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
               </TableRow>
             </TableFooter>
           </Table>
