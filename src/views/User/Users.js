@@ -75,7 +75,7 @@ const Users = () => {
   }, [status, offset, limit, dispatch]);
 
   const handleChangeRowsPerPage = ({target: {value}}) => {
-    setLimit(parseInt(value, 10));
+    setLimit(value);
   };
 
   const handleChangePage = (_, nextPage) => {
@@ -168,8 +168,8 @@ const Users = () => {
                     count={count}
                     page={offset}
                     rowsPerPage={limit}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </TableRow>
             </TableFooter>
